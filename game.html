@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilo.css">
+    <title>Descubra o Elemento</title>
+</head>
+
+<body>
+    <div id="game" class="section">
+        <div class="content-block">
+            <h2>Adivinhe o Elemento!</h2>
+            <form id="game-form">
+                <input type="text" id="campo" placeholder="Digite o nome do Elemento:">
+                <div class="button-container">
+                    <button type="submit" class="button">ENVIAR</button>
+                    <a href="index.html"><button type="button" class="button back-button">VOLTAR</button></a>
+                </div>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    <script>
+        const elementos = [
+            "Hidrogênio", "Hélio", "Lítio", "Berílio", "Boro", "Carbono", "Nitrogênio", "Oxigênio", "Flúor", "Neônio",
+            "Sódio", "Magnésio", "Alumínio", "Silício", "Fósforo", "Enxofre", "Cloro", "Argônio", "Potássio", "Cálcio",
+            "Escândio", "Titânio", "Vanádio", "Cromo", "Manganês", "Ferro", "Cobalto", "Níquel", "Cobre", "Zinco",
+            "Gálio", "Germânio", "Arsênio", "Selênio", "Bromo", "Criptônio", "Rubídio", "Estrôncio", "Ítrio", "Zircônio",
+            "Nióbio", "Molibdênio", "Tecnécio", "Rutênio", "Ródio", "Paládio", "Prata", "Cádmio", "Índio", "Estanho"
+        ];
+        let form = document.getElementById("game-form");
+        let campo = document.getElementById("campo");
+        let message = document.getElementById("message");
+        let nsort = Math.floor(Math.random() * 50) + 1;
+        let tentativas = 0;
+        let maxTentativas = 6;
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            let input = campo.value.toLowerCase();
+            let elementoEscolhido = -1;
+
+            for (let i = 0; i < elementos.length; i++) {
+                if (elementos[i].toLowerCase() === input) {
+                    elementoEscolhido = i;
+                    break;
+                }
+            }
+
+            if (elementoEscolhido === -1) {
+                message.innerText = "Elemento não encontrado. Tente novamente.";
+            } else {
+                tentativas++;
+                if (input === elementos[nsort - 1].toLowerCase()) {
+                    message.innerText = "Parabéns! Você acertou o elemento " + elementos[nsort - 1] + " com número atômico " + nsort + " em " + tentativas + " tentativa(s)!";
+                    recomecar();
+                } else if (elementoEscolhido + 1 < nsort) {
+                    message.innerText = "O número atômico do elemento sorteado é maior que " + (elementoEscolhido + 1) + ".";
+                } else {
+                    message.innerText = "O número atômico do elemento sorteado é menor que " + (elementoEscolhido + 1) + ".";
+                }
+
+                if (tentativas < maxTentativas) {
+                    message.innerText += " Você errou! Restam " + (maxTentativas - tentativas) + " tentativas.";
+                } else {
+                    message.innerText += " Você perdeu! Suas tentativas acabaram. O elemento era " + elementos[nsort - 1] + " com número atômico " + nsort + ".";
+                    recomecar();
+                }
+            }
+
+            campo.value = "";
+        });
+
+        function recomecar() {
+            nsort = Math.floor(Math.random() * 50) + 1;
+            tentativas = 0;
+        }
+    </script>
+</body>
+
+</html>
